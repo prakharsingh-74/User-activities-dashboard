@@ -1,10 +1,9 @@
-// src/App.tsx
 import React, { useEffect, useState } from 'react';
 import { BrowserRouter as Router, Route, Routes, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import UserProfile from './components/UserProfile';
 import UserActivities from './components/UserActivities';
-import HomeComponent from './components/Home'; // Import the HomeComponent
+import HomeComponent from './components/Home';
 import './App.css';
 
 interface User {
@@ -35,24 +34,24 @@ const App: React.FC = () => {
     }, []);
 
     const UserProfilePage = ({ userId }: { userId: string }) => {
-        const userIndex = Number(userId) - 1; // Convert userId to index
+        const userIndex = Number(userId) - 1;
         const navigate = useNavigate();
 
         const handleNext = () => {
             if (userIndex < users.length - 1) {
-                navigate(`/users/${users[userIndex + 1].id}`); // Navigate to next user's ID
+                navigate(`/users/${users[userIndex + 1].id}`);
             }
         };
 
         const handlePrevious = () => {
             if (userIndex > 0) {
-                navigate(`/users/${users[userIndex - 1].id}`); // Navigate to previous user's ID
+                navigate(`/users/${users[userIndex - 1].id}`);
             }
         };
 
         useEffect(() => {
             if (userIndex < 0 || userIndex >= users.length) {
-                navigate('/'); // Navigate to home if userIndex is out of bounds
+                navigate('/');
             }
         }, [userIndex, navigate, users.length]);
 

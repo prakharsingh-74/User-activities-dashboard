@@ -1,14 +1,16 @@
 import React from 'react';
-import { useNavigate } from 'react-router-dom';
+import './Home.css';
 
 const HomeComponent: React.FC = () => {
-    const navigate = useNavigate();
-
     return (
-        <div>
-            <h1>Welcome to User Profiles</h1>
-            <p>Click the button below to see the user profile and their activities:</p>
-            <button onClick={() => navigate('/users/1')}>Start to see</button>
+        <div className="home">
+            <div className="welcome-message">
+                <h2>Welcome to the User Profile Dashboard!</h2>
+                <p>Discover user profiles and their activities effortlessly.</p>
+            </div>
+            <button className="start-button" onClick={() => window.location.href = '/users/1'}>
+                Get Started
+            </button>
         </div>
     );
 };

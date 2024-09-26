@@ -1,7 +1,10 @@
+// src/App.tsx
 import React, { useEffect, useState } from 'react';
+import { BrowserRouter as Router, Route, Routes, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import UserProfile from './components/UserProfile';
 import UserActivities from './components/UserActivities';
+import HomeComponent from './components/Home'; // Import the HomeComponent
 import './App.css';
 
 interface User {
@@ -11,43 +14,76 @@ interface User {
     phone: string;
 }
 
-interface Activity {
-    id: number;
-    title: string;
-}
-
 const App: React.FC = () => {
-    const [user, setUser] = useState<User | null>(null);
-    const [activities, setActivities] = useState<Activity[]>([]);
+    const [users, setUsers] = useState<User[]>([]);
     const [loading, setLoading] = useState<boolean>(true);
     const [error, setError] = useState<string | null>(null);
 
     useEffect(() => {
-        const fetchData = async () => {
+        const fetchUsers = async () => {
             try {
-                const userResponse = await axios.get<User>('https://jsonplaceholder.typicode.com/users/1');
-                const activitiesResponse = await axios.get<Activity[]>('https://jsonplaceholder.typicode.com/posts?userId=1');
-
-                setUser(userResponse.data);
-                setActivities(activitiesResponse.data);
+                const usersResponse = await axios.get<User[]>('https://jsonplaceholder.typicode.com/users');
+                setUsers(usersResponse.data);
             } catch (err) {
-                setError('Failed to fetch data');
+                setError('Failed to fetch users');
             } finally {
                 setLoading(false);
             }
         };
 
-        fetchData();
+        fetchUsers();
     }, []);
+
+    const UserProfilePage = ({ userId }: { userId: string }) => {
+        const userIndex = Number(userId) - 1; // Convert userId to index
+        const navigate = useNavigate();
+
+        const handleNext = () => {
+            if (userIndex < users.length - 1) {
+                navigate(`/users/${users[userIndex + 1].id}`); // Navigate to next user's ID
+            }
+        };
+
+        const handlePrevious = () => {
+            if (userIndex > 0) {
+                navigate(`/users/${users[userIndex - 1].id}`); // Navigate to previous user's ID
+            }
+        };
+
+        useEffect(() => {
+            if (userIndex < 0 || userIndex >= users.length) {
+                navigate('/'); // Navigate to home if userIndex is out of bounds
+            }
+        }, [userIndex, navigate, users.length]);
+
+        if (userIndex < 0 || userIndex >= users.length) {
+            return <div>User not found</div>;
+        }
+
+        return (
+            <div className="UserProfilePage">
+                <UserProfile user={users[userIndex]} />
+                <UserActivities userId={users[userIndex].id} />
+                <div className="navigation">
+                    <button onClick={handlePrevious} disabled={userIndex <= 0}>Previous</button>
+                    <button onClick={handleNext} disabled={userIndex >= users.length - 1}>Next</button>
+                </div>
+            </div>
+        );
+    };
 
     if (loading) return <div>Loading...</div>;
     if (error) return <div>{error}</div>;
 
     return (
-        <div className="App">
-            {user && <UserProfile user={user} />}
-            <UserActivities activities={activities} />
-        </div>
+        <Router>
+            <Routes>
+                {users.map((user) => (
+                    <Route key={user.id} path={`/users/${user.id}`} element={<UserProfilePage userId={String(user.id)} />} />
+                ))}
+                <Route path="/" element={<HomeComponent />} />
+            </Routes>
+        </Router>
     );
 };
 

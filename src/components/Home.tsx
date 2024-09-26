@@ -8,7 +8,7 @@ const HomeComponent: React.FC = () => {
                 <h2>Welcome to the User Profile Dashboard!</h2>
                 <p>Discover user profiles and their activities effortlessly.</p>
             </div>
-            <button className="start-button" onClick={() => window.location.href = '/users/1'}>
+            <button className="start-button" onClick={() => window.location.href = 'https://user-dashboard-sooty-seven.vercel.app/users/1'}>
                 Get Started
             </button>
         </div>

@@ -11,3 +11,6 @@ Currently, two official plugins are available:
 
 
 https://github.com/user-attachments/assets/aca583fa-5d67-4f1a-9c17-60a7b2b729cc
+
+
+you can go to the other user by clicking on the next button

@@ -9,3 +9,5 @@ Currently, two official plugins are available:
 
 # WORKING ON THE DEVELOPMENT SERVER - 
 
+
+https://github.com/user-attachments/assets/aca583fa-5d67-4f1a-9c17-60a7b2b729cc

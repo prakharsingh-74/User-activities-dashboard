@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { BrowserRouter as Router, Route, Routes, useNavigate } from 'react-router-dom';
+import { BrowserRouter as Router, Route, Routes, useNavigate, useParams } from 'react-router-dom';
 import axios from 'axios';
 import UserProfile from './components/UserProfile';
 import UserActivities from './components/UserActivities';
@@ -33,8 +33,9 @@ const App: React.FC = () => {
         fetchUsers();
     }, []);
 
-    const UserProfilePage = ({ userId }: { userId: string }) => {
-        const userIndex = Number(userId) - 1;
+    const UserProfilePage = () => {
+        const { id } = useParams<{ id: string }>();
+        const userIndex = Number(id) - 1;
         const navigate = useNavigate();
 
         const handleNext = () => {
@@ -77,10 +78,8 @@ const App: React.FC = () => {
     return (
         <Router>
             <Routes>
-                {users.map((user) => (
-                    <Route key={user.id} path={`/users/${user.id}`} element={<UserProfilePage userId={String(user.id)} />} />
-                ))}
                 <Route path="/" element={<HomeComponent />} />
+                <Route path="/users/:id" element={<UserProfilePage />} />
             </Routes>
         </Router>
     );
